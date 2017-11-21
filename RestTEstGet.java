@@ -2,6 +2,8 @@ package com.myapp.cxf.form;
 
 
 
+import static io.restassured.RestAssured.given;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,8 +12,9 @@ import io.restassured.http.Method;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
  
-public class RestTEstGet {
+public  class RestTEstGet extends Object{
 	
 	@Test
 	public void GetWeatherDetails()
@@ -57,5 +60,41 @@ public class RestTEstGet {
 	 
 	}
 	
+	
+	@Test
+	public void testMyApp() {
+		
+		//RequestSpecification requestSpecification = new RestAssuredConfiguration().getRequestSpecification();
+		RestAssured.baseURI ="http://localhost:8080/MyApp/services/crud/myCrudService";
+		RequestSpecification req = RestAssured.given();
+		//http://localhost:8080/MyApp/services/myAppService/getFibSeries/?id=1
+		/*RestAssured.baseURI ="http://localhost:8080/MyApp/services/crud/myCrudService";
+		RequestSpecification req = RestAssured.given();*/
+
+		Response r = given().
+        parameters("fName", "w", "lName", "Doe","address","ww","city","ww").
+when().
+        post("/add");
+		
+		System.out.println(r.getBody().print());
+
+		/*  req.formParams("fName", "s","lName", "Doe","address","ww","city","ww").log().all();
+	        given().spec(req).post("/add").
+	                then().statusCode(200).log().all();
+	*/
+	
+	
+	}
+	
+	@Test()
+	public void testfib() {
+		RestAssured.baseURI = "http://localhost:8080/MyApp/services/myAppService";
+		RequestSpecification req = RestAssured.given();
+		Response r = given().parameters("id",2).when().get("/getFibSeries");
+		//Response r = (Response) req.formParam("id", 1).given().spec(req).get("/getFibSeries").then().statusCode(200).log().all();
+		System.out.println(r.body().print());
+		
+		
+	}
 	
 }
